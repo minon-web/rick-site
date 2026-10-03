@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Рик и Морти: Биографии</title>
+    <style>
+        body {
+            background-color: #050505;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        nav {
+            background-color: #111;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        nav a {
+            color: #0ff;
+            margin: 0 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #ff9d00;
+            transition: width 0.3s;
+        }
+
+        nav a:hover { color: #fff; }
+        nav a:hover::after { width: 100%; }
+
+        .section {
+            min-height: 100vh;
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 255, 255, 0.3);
+            border-color: #0ff;
+        }
+
+        /* Эффект тряски для пасхалки */
+        .card.shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 
+                         0 0 20px rgba(0, 255, 255, 0.7), 
+                         0 0 40px rgba(0, 255, 255, 0.9);
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #ff9d00;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #aaa;
+            max-width: 600px;
+            margin: 0 auto 20px;
+        }
+
+        img {
+            width: 300px;
+            height: auto;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #1a1a2e;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 255, 255, 0.4);
+        }
+
+        button.rick-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, #ff0055, #ff5500);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 0, 85, 0.4);
+            transition: transform 0.1s, box-shadow 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        button.rick-btn:active {
+            transform: scale(0.95);
+        }
+
+        button.rick-btn:hover {
+            box-shadow: 0 10px 25px rgba(255, 85, 0, 0.6);
+        }
+
+        /* Стиль для счётчика - делаем его похожим на приборную панель */
+        #count-display {
+            font-size: 2rem; /* Крупнее */
+            color: #00ff88;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace; /* Моноширинный шрифт */
+            margin-top: 10px;
+            display: block;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        #rick-quote {
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-style: italic;
+            min-height: 1.5em;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s, transform 0.4s, color 0.3s;
+        }
+
+        #rick-quote.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#rick">Рик Санчез</a>
+        <a href="#morty">Морти Смит</a>
+    </nav>
+
+    <div id="rick" class="section">
+        <div class="card" id="rick-card">
+            <img src="rick.jpg" alt="Рик Санчез">
+            <h1>Рик Санчез</h1>
+            <h2>Гений и циник</h2>
+            <p>Рик — самый умный человек во вселенной, но это не делает его хорошим. Портальные пушки, межпространственные путешествия и вечное недовольство — его главные инструменты.</p>
+            
+            <button class="rick-btn" id="rick-button">Спасти вселенную</button>
+            <span id="count-display">Спасений: 0</span>
+            <div id="rick-quote"></div>
+        </div>
+    </div>
+
+    <div id="morty" class="section">
+        <div class="card">
+            <img src="morty.jpg" alt="Морти Смит">
+            <h1>Морти Смит</h1>
+            <h2>Обычный подросток</h2>
+            <p>Морти постоянно попадает в экзистенциальные кризисы из-за дедушки. Он добрый, напуганный, но удивительно стойкий.</p>
+        </div>
+    </div>
+
+    <script>
+        let count = 0;
+        const button = document.getElementById('rick-button');
+        const display = document.getElementById('count-display');
+        const quoteBox = document.getElementById('rick-quote');
+        const rickCard = document.getElementById('rick-card');
+
+        // 5 крутых цитат Рика
+        const quotes = [
+            "Wubba Lubba Dub Dub!",
+            "Я Рик. Я знаю всё. Кроме, может быть, того, как быть нормальным.",
+            "Вселенная — это просто коробка с сюрпризами. И большинство из них — плохие.",
+            "Наука — это магия, которая работает. Скучно, правда?",
+             'Спасти вселенну'
+
+        ];
+
+        button.addEventListener('click', () => {
+            count++;
+            // Обновляем счётчик с форматированием
+            display.textContent = `Спасений: \${count}`;
+
+            // Выбираем случайную цитату
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            
+            // Генерируем случайный яркий цвет
+            const randomColor = `hsl(\${Math.random() * 360}, 100%, 60%)`;
+
+            // Показываем цитату
+            quoteBox.textContent = randomQuote;
+            quoteBox.style.color = randomColor;
+            quoteBox.classList.remove('show');
+            void quoteBox.offsetWidth; // Трюк для перезапуска анимации
+            quoteBox.classList.add('show');
+
+            // Пасхалка на 5 кликов: фиолетовый фон
+            if (count === 5) {
+                document.body.style.backgroundColor = '#8a2be2';
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '#050505';
+                }, 1000);
+            }
+
+            // Пасхалка на 7 кликов: Рик устал и трясётся
+            if (count === 7) {
+                rickCard.classList.add('shake');
+                setTimeout(() => {
+                    rickCard.classList.remove('shake');
+                }, 500);
+                
+                // Меняем цитату на особую для 7-го клика
+                quoteBox.textContent = "Я устал. Вселенная спасена. Где мой виски?";
+                quoteBox.style.color = '#ffaa00';
+            }
+        });
+    </script>
+</body>
+</html>
